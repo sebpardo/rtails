@@ -1,0 +1,116 @@
+---
+title: "Using the rtails package"
+author: "Sebastián Pardo"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{my-vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 7
+)
+```
+
+## Introduction
+
+The `rtails` package aims to provide an easy set of functions to obtain
+heavy-tailed multiplicative random deviates (i.e., positive only, centered around 1), 
+to expand on potential recruitment deviation scenarios.
+
+So far, the heavy-tailed random deviates are generated using: 
+
+- normal mixture (i.e. standard normal with sporadic wider normal draws)
+- Pareto
+- Student-t
+
+Where possible, functions are bias-corrected around a mean of 1, however a 
+correction is not always applicable. Both the normal mixture and Student-t
+distributions are exponentiated so that values are positive and (ideally)
+centered around 1.
+
+We also provide the `plot_tails()` function, for easy visualization of the 
+generated random deviates.
+
+### Normal mixture: `rnorm_tails()`
+
+Aside from specifying the sample size with `n`, the `rnorm_tails()` function takes
+two variance values: one for the underlying distribution (`sigma`), and the other
+for the heavy-tailed sporadic values (`highsigma`). The probability of replacing each 
+value with the sporadic draw is given by the `rate` argument:
+
+```{r setup}
+# library(rtails)
+devtools::load_all()
+library(magrittr)
+```
+
+```{r rnorm_tails}
+set.seed(51)
+
+rnt <- rnorm_tails(80, sigma = 0.1, highsigma = 2, rate = 1/38)
+plot_tails(rnt)
+```
+
+Notice that the sporadic recruitment points (i.e. those that diverge considerably
+from the underlying normal distribution) are marked in red. The positions of 
+these sporadic draws are stored in the `ht` attribute of the vector object:
+```{r rnorm_tails_attr}
+attr(rnt, "ht")
+```
+
+This function also takes as a first argument a vector of random deviates that
+is updated to include sporadic events:
+
+```{r rnorm_tails_replace}
+rn <- rnorm(80, mean = -0.5 * 0.1^2, sd = 0.1) %>% exp() # bias-corrected mean
+plot_tails(rn)
+
+rnt2 <- rnorm_tails(rn, highsigma = 2, rate = 1/10, replace = TRUE)
+plot_tails(rnt2)
+```
+
+### Pareto distribution: `rpareto_tails()`
+
+The Pareto distribution function takes only a `shape` parameter, where
+lower values result in wider tails:
+
+```{r rpareto_tails}
+rpt <- rpareto_tails(80, 3)
+plot_tails(rpt)
+
+rpt2 <- rpareto_tails(80, 30)
+plot_tails(rpt2)
+```
+
+Fortunately, the Pareto distribution can be bias-corrected and therefore
+the random deviates are centered around one:
+
+```{r}
+replicate(5, rpareto_tails(100000, 3) %>% mean)
+```
+
+### Student-t distribution: `rst_tails()`
+
+The Student-t distribution function also takes one parameter for the degrees
+of freedom `df`. 
+
+```{r rst_tails}
+rst <- rst_tails(80, 20)
+plot_tails(rst)
+```
+
+Notice how the sample mean is considerably different from 1. However, as the 
+Student-t distribution becomes the normal when df = Inf`, we also
+provide the option to bias-correct the values using the same correction factor used
+for normal distributions before exponentiating (mean = $\mu-\sigma^2/2$). Obviously,
+this means the bias-correction will be more accurate as the values of `df` increase:
+
+```{r rst_tails_biascorr}
+rst2 <- rst_tails(80, 20, bias.correct = TRUE)
+plot_tails(rst2)
+```
