@@ -105,7 +105,7 @@ plot_tails(rst)
 ```
 
 Notice how the sample mean is considerably different from 1. However, as the 
-Student-t distribution becomes the normal when df = Inf`, we also
+Student-t distribution becomes the normal when `df = Inf`, we also
 provide the option to bias-correct the values using the same correction factor used
 for normal distributions before exponentiating (mean = $\mu-\sigma^2/2$). Obviously,
 this means the bias-correction will be more accurate as the values of `df` increase:
