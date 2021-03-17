@@ -4,7 +4,15 @@
 \alias{rst_tails}
 \title{Random generation of Student-t deviations}
 \usage{
-rst_tails(n, df = 10, bias.correct = FALSE)
+rst_tails(
+  n,
+  df = 10,
+  bias_correct = TRUE,
+  ac = 0,
+  log = FALSE,
+  skew = NULL,
+  seed = NA
+)
 }
 \arguments{
 \item{n}{sample size.}
@@ -13,8 +21,23 @@ rst_tails(n, df = 10, bias.correct = FALSE)
 allowed if bias.correct = FALSE, where it becomes equivalent to the standard
 normal distribution.}
 
-\item{bias.correct}{Logical. Should we bias correct the mean using
-the log-normal distribution correction factor (\eqn{-\sigma^2/2}).}
+\item{bias_correct}{logical. Should we bias correct using the sample mean.
+The sample mean is calculated from exponentiated distribution,
+but is subtracted, which is then re-exponentiated; therefore the
+bias-correction should produce a mean of exactly 1.}
+
+\item{ac}{auto-correlation value, between -1 and 1. If `ac != 0` autocorrelation is
+incorporated in the vector using an AR(\emph{1}) process.}
+
+\item{log}{logical. Whether to return the distribution before it is
+bias corrected and exponentiated. This is not equivalent to
+log-transforming the distribution when `log = FALSE`.}
+
+\item{skew}{value of skewness parameter. If unspecified then no
+skewness is incorporated. Defaults to `NULL`.}
+
+\item{seed}{seed. Numeric for `set.seed()`. Defaults to NA where no seed is
+set.}
 }
 \value{
 a vector of random deviates of length `n`.
@@ -26,5 +49,6 @@ exponentiated, with `df` degrees of freedom.
 \examples{
 rst <- rst_tails(50, 3)
 plot_tails(rst)
+mean(rst) == 1
 
 }

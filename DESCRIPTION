@@ -1,12 +1,13 @@
 Package: rtails
 Type: Package
 Title: Simulate heavy-tailed deviations
-Version: 0.1.0
+Version: 0.0.90001
 Authors@R: person("Sebastián", "Pardo", role = c("aut", "cre"), email = "sebpardo@gmail.com", comment = c(ORCID = "0000-0002-4147-5796"))
 Description: Create random heavy-tailed deviates using several different
-    distributions. This package is originally mean to provide recuitment
+    distributions. This package is originally meant to provide recuitment
     deviations for Management Strategy Evaluation using the openMSE packages,
-    but can also be used for other applications as well.
+    but can be used for any process where heavy-tailed deviations 
+    are appropriate.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true

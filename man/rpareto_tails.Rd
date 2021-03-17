@@ -4,12 +4,31 @@
 \alias{rpareto_tails}
 \title{Random generation of Pareto deviations}
 \usage{
-rpareto_tails(n, shape = 2)
+rpareto_tails(
+  n,
+  shape = 2,
+  bias_correct = TRUE,
+  ac = 0,
+  log = FALSE,
+  seed = NA
+)
 }
 \arguments{
 \item{n}{sample size.}
 
 \item{shape}{shape parameter. Default is shape = 2.}
+
+\item{bias_correct}{logical. Should we bias correct.
+The mean to use for bias correction can only be calculated when
+`shape > 1`.}
+
+\item{ac}{auto-correlation value, between -1 and 1. If `ac != 0` autocorrelation is
+incorporated in the vector using an AR(\emph{1}) process.}
+
+\item{log}{logical. Whether to return the log-transformed distribution.}
+
+\item{seed}{seed. Numeric for `set.seed()`. Defaults to NA where no seed is
+set.}
 }
 \description{
 Random generation for the Pareto distribution, centered around a mean
