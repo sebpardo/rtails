@@ -35,7 +35,7 @@ plot_tails <- function(vec) {
   df <- data.frame(x = 1:n, y = vec, mix = mix)
   ggplot(df, aes(x, y)) +
     scale_x_continuous(limit = c(min(df$x), max(df$x))) +
-    scale_y_continuous(limit = c(0, max(df$y))) +
+    scale_y_continuous(limit = c(ifelse(min(df$y) < 0, min(df$y), 0), max(df$y))) +
     coord_cartesian(clip = "off") +
     geom_hline(yintercept = 0:1, color = "grey") +
     geom_line(aes(x, mean), size = 0.5, color = "darkgreen") +
