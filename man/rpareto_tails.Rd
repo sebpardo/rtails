@@ -6,8 +6,9 @@
 \usage{
 rpareto_tails(
   n,
-  shape = 2,
+  shape = 3,
   bias_correct = TRUE,
+  sample_bias_correct = FALSE,
   ac = 0,
   log = FALSE,
   seed = NA
@@ -21,6 +22,10 @@ rpareto_tails(
 \item{bias_correct}{logical. Should we bias correct.
 The mean to use for bias correction can only be calculated when
 `shape > 1`.}
+
+\item{sample_bias_correct}{logical. Should we bias correct using the sample
+mean. Defaults to `FALSE`.If `bias_correct = TRUE` then this parameter
+is ignored (i.e. equals `FALSE`).}
 
 \item{ac}{auto-correlation value, between -1 and 1. If `ac != 0` autocorrelation is
 incorporated in the vector using an AR(\emph{1}) process.}

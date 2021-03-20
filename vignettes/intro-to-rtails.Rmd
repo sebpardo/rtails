@@ -1,0 +1,326 @@
+---
+title: "intro-to-rtails"
+author: "Sebastián Pardo"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{intro-to-rtails}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 7
+)
+```
+
+## Introduction to `rtails`
+
+The `rtails` package provides functions to easily obtain
+heavy-tailed multiplicative random deviates (i.e., positive only, centered around 1).
+While its primary aim is to simulate heavy-tailed recruitment deviations, these
+functions could also be used for other applications as well.
+
+The heavy-tailed random deviates are generated using four distributions: 
+
+- Normal mixture (i.e. normal with sporadic wider normal draws): `rnorm_tails()`
+- Pareto: `rpareto_tails()`
+- Student-t: `rst_tails()`
+- Generalized Extreme Variance: `rgev_tails()`
+
+Where possible, functions are analytically bias-corrected around a mean of 1 
+by default. However, this correction is not always applicable
+(e.g. Student-t and GEV). We therefore also allow all functions to 
+be bias corrected using the drawn sample mean (`sample_bias_correct`). 
+All functions also take a `seed` argument so that different parameterizations 
+of each distribution using a given seed can be more directly comparable.
+
+We also provide the `plot_tails()` function, for easy visualization of the 
+generated random deviates.
+ 
+## Functions 
+
+### Normal mixture: `rnorm_tails()`
+
+The `rnorm_tails()` function gives you control over two separate normal distributions,
+with the underlying non-heavy-tailed spread determined by `sigma`, and the
+wider distribution determined by `high_sigma` with the frequency of 
+sporadic events determined by `rate`.
+The normal mixture can be used as a simple intuitive
+way of parameterizing heavy-tailed recruitment, but is particularly suitable
+for situations where it is thought there are 2 discrete state that have different
+recruitment dynamics.
+
+Aside from specifying the sample size with `n`, the `rnorm_tails()` function takes
+two variance values: one for the underlying distribution (`sigma`), and the other
+for the heavy-tailed sporadic values (`high_sigma`). The probability of replacing each 
+value with the sporadic draw is given by the `rate` argument, while autocorrelation (`ac`), skew (`skew`),
+and bias correction using the sample mean (`sample_bias_correction`) can also be incorporated.
+
+```{r packages, eval=FALSE}
+library(rtails)
+library(magrittr)
+```
+
+```{r real-packages, include=FALSE}
+devtools::load_all()
+library(magrittr)
+```
+
+```{r rnorm_tails}
+set.seed(51)
+
+rnt <- rnorm_tails(80, sigma = 0.1, high_sigma = 2, rate = 1/14)
+plot_tails(rnt)
+```
+
+Notice that the sporadic recruitment points (i.e. those that diverge considerably
+from the underlying normal distribution) are marked in red. The positions of 
+these sporadic draws are stored in the `ht` attribute of the vector object:
+
+```{r rnorm_tails_attr}
+attr(rnt, "ht")
+```
+
+This function also takes as a first argument a vector of random deviates that
+is updated to include sporadic events:
+
+```{r rnorm_tails_replace}
+rn <- rnorm(80, mean = -0.5 * 0.1^2, sd = 0.1) %>% exp() # bias-corrected mean
+plot_tails(rn)
+
+rnt2 <- rnorm_tails(rn, high_sigma = 2, rate = 1/10, replace = TRUE, seed = 19)
+plot_tails(rnt2)
+```
+
+Note how most heavy-tailed sporadic events are biased low; this is because the 
+wider normal, when exponentiated, can produce values that are extremely high, thus
+to maintain a mean of one there are usually many more low points than high:
+
+```{r rnorm_tails_replace_2}
+rnt3 <- rnorm_tails(rn, high_sigma = 2, rate = 1/10, replace = TRUE, seed = 25)
+plot_tails(rnt3)
+```
+
+Autocorrelation and skewness can be easily incorporated as well:
+
+```{r rnorm_tails_ac}
+rnt4 <- rnorm_tails(60, high_sigma = 2, rate = 1/10, ac = 0.7,
+                    seed = 1984)
+plot_tails(rnt4)
+```
+
+```{r rnorm_tails_skew}
+rnt5 <- rnorm_tails(60, high_sigma = 2, rate = 1/10, skew = 20000000,
+                    seed = 1984)
+plot_tails(rnt5)
+mean(rnt5)
+```
+
+```{r rnorm_tails_skew_2}
+rnt6 <- rnorm_tails(60, high_sigma = 2, rate = 1/10, skew = -20000000,
+                    seed = 1984)
+
+plot_tails(rnt6)
+mean(rnt6)
+```
+
+A negatively-skewed mixture normal can be used to model heavy-tailed recruitment
+failures, where the rate at which they occur can be explicitly incorporated.
+
+### Pareto distribution: `rpareto_tails()`
+
+The Pareto distribution function has a `shape` parameter, where
+lower values result in a wider spread and heavier tails:
+
+```{r rpareto_tails}
+rpt <- rpareto_tails(80, 3)
+plot_tails(rpt)
+
+rpt2 <- rpareto_tails(80, 30)
+plot_tails(rpt2)
+```
+
+Fortunately, the Pareto distribution can be bias-corrected and therefore 
+the random deviates are centered around one:
+
+```{r pareto_tails_means}
+replicate(5, rpareto_tails(100000, 3) %>% mean)
+```
+
+Autocorrelation can also be included:
+
+```{r pareto_tails-ac-skew}
+rpareto_tails(80, 30, ac = 0.25, sample_bias_correct = TRUE, 
+              bias_correct = FALSE) %>% plot_tails()
+```
+
+### Student-t distribution: `rst_tails()`
+
+The `rst_tails()` function also takes one parameter for the degrees
+of freedom `df`, and tends to be a predominantly right-tailed distribution
+that approximates the normal as `df` increases to infinity. The 
+Student-t distribution mixes frequency and severity for a general heavy-tailedness. 
+
+```{r rst_tails}
+rst <- rst_tails(80, 20, seed = 42)
+plot_tails(rst)
+```
+
+```{r rst-mean}
+mean(rst)
+```
+
+Notice how the sample mean is exactly one. This is because the Student-t
+distribution cannot be analytically bias corrected, so a bias correction
+using the sample mean is applied by default.
+
+```{r rst_tails_nobiascorr}
+rst2 <- rst_tails(80, 20, seed = 42, bias_correct = FALSE)
+plot_tails(rst2)
+```
+
+Autocorrelation and skew can also be included:
+
+```{r rst_tails-ac-skew}
+rst_tails(80, 20, seed = 42, ac = 0.7) %>% plot_tails()
+
+rst_tails(80, 20, seed = 42, skew = -1.2) %>% plot_tails()
+```
+
+Including a `skew` argument uses a different function (`fGarch::rsstd()`) so
+the resulting draws will be different to those without skew even with
+the same `seed`.
+
+### Generalized extreme value distribution: `rgev_tails()`
+
+The GEV distribution function takes two parameters: `shape` and `scale`, the 
+latter which has to be greater than zero.
+
+```{r rgev_tails}
+rgev <- rgev_tails(80, scale = 0.23, shape = 0.2)
+plot_tails(rgev)
+```
+
+Values of `scale` greater than 1 result in extremely right-tailed distributions,
+perhaps much more so than any recruitment scenario:
+
+```{r rgev_tails_2}
+rgev2 <- rgev_tails(80, scale = 2, shape = 0.2)
+plot_tails(rgev2)
+```
+
+Including autocorrelation:
+
+```{r rgev_tails_ac}
+rgev_tails(80, scale = 0.23, shape = 0.2, ac = 0.8) %>% plot_tails()
+```
+
+## Usage examples
+
+Some temperate rockfishes in the genus *Sebastes* show a pattern of recruitment
+where there are multiple decades of low recruitment followed by a single year
+(or even a few years) of very high recruitment that can sustain the population
+for quite a while as it is fished down. The yelloweye rockfish (*S. ruberrimus*) 
+and Bocaccio rockfish (*S. paucispinis*) in the coast of British Columbia, Canada, 
+as well as deepwater redfish (*S. mentella*) and Acadian redfish (*S. fasciatus*)
+in Atlantic Canada are well-known examples. Some fast growing species also
+show a similar recruitment pattern, for example Atlantic mackerel 
+(*Scomber scombrus*) shows years or very high recruitment once or twice per decade.
+
+
+```{r yelloweye}
+rpareto_tails(60, shape = 1.5, seed = 1) %>% plot_tails()
+
+rst_tails(60, df = 6, seed = 8) %>% plot_tails()
+
+# sample bias correcting provides a right-skewed distribution of 
+# extreme events
+rnorm_tails(60, sigma = 0.1, high_sigma = 4, rate = 1/20, bias_correct = FALSE,
+            sample_bias_correct = TRUE, seed = 44) %>% 
+  plot_tails()
+```
+
+Pacific Cod in Alaska is a population where extreme low recruitment is 
+hypothesized to have been caused by a lack of spawning environment due to 
+elevated bottom temperatures. It's probably not as extreme and the concern 
+is about downward only events, and seem to cycle more on a decadal time span.
+For this population, a negatively-skewed mixture normal would be suitable
+as it can incorporate both extreme low recruitment (skewness of wider distribution)
+and it's decadal nature (`rate = 1/10`):
+
+```{r pacific-cod} 
+rnorm_tails(60, sigma = 0.1, high_sigma = 2, rate = 1/10, 
+            skew = -100, seed = 1984) %>%
+  plot_tails()
+```
+ 
+Another way of thing about heavy-tail distributions is in terms of frequency of extreme
+events, directionality (left- or right-skewed), and intensity (slightly 
+heavy tailed vs. extremely heavy tailed). These axes of variation are controlled
+by different arguments in each function:
+
+- frequency: `rate` parameter in `rnorm_tails()`, `df` in `rst_tails()`
+- direction: 
+    - left (towards zero) `rnorm_tails()`with `skew`
+    - right (towards infinity): `rst_tails()`,`rpareto_tails()`
+- intensity: `high_sigma` parameter in `rnorm_tails()`, `df` in `rst_tails()`, `shape` parameter in `rgev_tails()` and
+`rpareto_tails()`.
+
+
+### Incorporating recruitment deviations to Operating Models in `SAMtool`
+
+The main usage of this package is to provide random recruitment deviations 
+to be used for Management Strategy Evaluation (MSE) using the `SAMtool` package.
+This can be done directly by providing recruitment deviates as a custom parameter,
+especifically the `Perr_y` parameter:
+
+
+```{r samtool-validcpars}
+library(DT)
+library(SAMtool)
+MSEtool:::cpars_info %>% dplyr::filter(Var == "Perr_y") %>% datatable()
+```
+
+
+The `Perr_y` custom parameter has specific dimensions that need to be followed,
+however for incorporating heavy-tailed recruitment in future projections we 
+have to focus on providing deviations for columns starting at `maxage + nyears + 1`.
+
+A simple example of incorporating normal mixture random deviates using a
+Student-t distribution (`rst_tails()`):
+
+
+```{r example-om}
+om <- new("OM", Rockfish, Generic_Fleet, Generic_Obs, Perfect_Imp)
+
+om@nsim
+om@nsim <- 5 # fewer simulations for faster runs
+om@maxage
+om@proyears
+om@nyears
+
+# Creating Perr_y matrix 
+Perr_y <- matrix(data = 1, nrow = om@nsim, 
+                 ncol = om@maxage + om@nyears + om@proyears)
+dim(Perr_y)
+
+recdevs <- rst_tails(n = om@nsim * om@proyears, df = 7.5, seed = 42) 
+plot_tails(recdevs) 
+
+Perr_y[,(om@maxage + om@nyears + 1):ncol(Perr_y)] <- recdevs
+
+om_ht <- om # copying om
+om_ht@cpars <- list(Perr_y = Perr_y) # storing recruitment deviations in cpars
+```
+
+Finally, run the MSEs:
+
+```{r runmse, eval=FALSE}
+mse <- runMSE(OM = om, MPs = c("curEref", "FMSYref"))
+mse_ht <- runMSE(OM = om_ht, MPs = c("curEref", "FMSYref"))
+```
+
+**TO DO: Add two simple figures to show differences in MSEs**

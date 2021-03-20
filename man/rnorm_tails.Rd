@@ -4,7 +4,20 @@
 \alias{rnorm_tails}
 \title{Random generation of normal mixture deviations}
 \usage{
-rnorm_tails(n, sigma = 0.1, highsigma = 2, rate = 1/38, replace = FALSE)
+rnorm_tails(
+  n,
+  sigma = 0.1,
+  high_sigma = 2,
+  rate = 1/38,
+  bias_correct = TRUE,
+  sample_bias_correct = FALSE,
+  ac = 0,
+  log = FALSE,
+  plus_one = FALSE,
+  skew = NULL,
+  seed = NA,
+  replace = FALSE
+)
 }
 \arguments{
 \item{n}{sample size, or a vector of random deviates to update if
@@ -13,12 +26,36 @@ rnorm_tails(n, sigma = 0.1, highsigma = 2, rate = 1/38, replace = FALSE)
 \item{sigma}{variance of the underlying normal distribution, defaults
 to 0.1. Ignored if `replace = TRUE`.}
 
-\item{highsigma}{variance of the sporadic normal distribution, should be
+\item{high_sigma}{variance of the sporadic normal distribution, should be
 higher than `sigma`, defaults to 1.5.}
 
 \item{rate}{rate at which the wider sporadic normal distribution replaces
 the underlying distribution. This is determined by a binomial process
 using `rbinom(1, n, rate)`.}
+
+\item{bias_correct}{logical. Should we bias correct analytically.}
+
+\item{sample_bias_correct}{logical. Should we bias correct using the sample
+mean, which results in a mean of exactly 1. Defaults to `FALSE`. If
+`bias_correct = TRUE` then this parameter is ignored (i.e. equals `FALSE`).}
+
+\item{ac}{auto-correlation value, between -1 and 1. If `ac != 0` autocorrelation is
+incorporated in the vector using an AR(\emph{1}) process, and is applied
+after exponentiating except when `log = TRUE`.}
+
+\item{log}{logical. Whether to return the distribution before it is
+bias corrected and exponentiated. This is not equivalent to
+log-transforming the distribution when `log = FALSE`.}
+
+\item{skew}{value of skewness parameter. When set, the skew-normal
+distribution from the `sn` package is used (i.e. `sn::rsn`), therefore
+when setting `seed` the drawn values will probably differ to those
+without skew.
+Defaults to `NULL`, where no skewness is incorporated and the
+traditional `rnorm` function is used.}
+
+\item{seed}{seed. Numeric for `set.seed()`. Defaults to NA where no seed is
+set.}
 
 \item{replace}{logical. Whether to replace a vector of deviates using
 sporadic values or create it from scratch. If `TRUE`, then
@@ -26,7 +63,7 @@ sporadic values or create it from scratch. If `TRUE`, then
 }
 \value{
 a vector of random deviates of length `n`. If there were sporadic
-deviates where the `highsigma` distribution replaced the underlying one,
+deviates where the `high_sigma` distribution replaced the underlying one,
 then the positions of these events are stored in the `ht` attribute of the
 vector.
 }
@@ -39,7 +76,7 @@ Both normal distributions are bias corrected independently so that
 their means in log-space equal to 1 (\eqn{-\sigma^2/2}).
 }
 \examples{
-rnt <- rnorm_tails(500, sigma = 0.2, highsigma = 1.5, rate = 1/19)
+rnt <- rnorm_tails(500, sigma = 0.2, high_sigma = 1.5, rate = 1/19)
 plot_tails(rnt)
 
 }

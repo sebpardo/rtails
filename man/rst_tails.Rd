@@ -23,8 +23,9 @@ normal distribution.}
 
 \item{bias_correct}{logical. Should we bias correct using the sample mean.
 The sample mean is calculated from exponentiated distribution,
-but is subtracted, which is then re-exponentiated; therefore the
-bias-correction should produce a mean of exactly 1.}
+but is subtracted from the distribution in normal space,
+ which is then re-exponentiated. Therefore, the
+bias-correction produces a distribution with a mean of exactly 1.}
 
 \item{ac}{auto-correlation value, between -1 and 1. If `ac != 0` autocorrelation is
 incorporated in the vector using an AR(\emph{1}) process.}
