@@ -5,10 +5,9 @@
 #'
 #' @param n sample size.
 #' @param loc location parameter.
-#' @param scale scale parameter.
+#' @param scale scale parameter. Must be > 0.
 #' @param shape shape parameter. Default is shape = 2.
-#' @param bias_correct logical. Should we bias correct.
-#'   The mean to use for bias correction can only be calculated when `shape < 1`.
+#' @param bias_correct logical. Should we bias correct using the sample mean?
 #' @param ac auto-correlation value, between -1 and 1. If `ac != 0` autocorrelation is
 #'   incorporated in the vector using an AR(\emph{1}) process.
 #' @param log logical. Whether to return the log-transformed distribution.
@@ -24,9 +23,16 @@
 #' @export
 rgev_tails <- function(n, scale = 1, shape = 0, bias_correct = TRUE,
                        ac = 0, log = FALSE, seed = NA) {
-  gevpar <- generate_gev_par(scale, shape)
- # bias_corr <- 0
- # if (bias_correct) bias_corr <- gevpar$location
+
+  if (is.na(n) || n <= 0 || n != trunc(n) || length(n) != 1) {
+    stop("'n' must be a positive integer.")
+  }
+
+  if (scale <= 0) stop("Scale parameter must be greater than zero.")
+
+  # # For warnings
+  # gev_pars <- generate_gev_par(scale, shape)
+
   if (!is.na(seed)) set.seed(seed)
   gev <- rgev(n, loc = 0, scale, shape)
 
@@ -41,11 +47,8 @@ rgev_tails <- function(n, scale = 1, shape = 0, bias_correct = TRUE,
   gev_exp <- exp(gev)
 
   if (bias_correct) {
-    bias_corr <- log(mean(gev_exp))
-    gev_corr <- gev - bias_corr
-    gev_corr_exp <- exp(gev_corr)
-    return(gev_corr_exp)
-  } else {
+    sample_bias_corr(gev)
+    } else {
       return(gev_exp)
     }
 }

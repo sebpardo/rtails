@@ -8,6 +8,9 @@
 #' @param bias_correct logical. Should we bias correct.
 #'   The mean to use for bias correction can only be calculated when
 #'   `shape > 1`.
+#' @param sample_bias_correct logical. Should we bias correct using the sample
+#'   mean. Defaults to `FALSE`.If `bias_correct = TRUE` then this parameter
+#'   is ignored (i.e. equals `FALSE`).
 #' @param ac auto-correlation value, between -1 and 1. If `ac != 0` autocorrelation is
 #'   incorporated in the vector using an AR(\emph{1}) process.
 #' @param log logical. Whether to return the log-transformed distribution.
@@ -21,8 +24,15 @@
 #' plot_tails(rpt)
 #'
 #' @export
-rpareto_tails <- function(n, shape = 2, bias_correct = TRUE, ac = 0,
+rpareto_tails <- function(n, shape = 3, bias_correct = TRUE,
+                          sample_bias_correct = FALSE, ac = 0,
                           log = FALSE, seed = NA) {
+
+  if (shape <= 0) stop("Shape parameter must be greater than zero.")
+  if (bias_correct && sample_bias_correct) {
+    warning("Both bias_correct and sample_bias_correct set as TRUE, ignoring sample_bias_correct.")
+  }
+
   rpar <- generate_pareto_par(shape)
   bias_corr <- 1
   if (bias_correct) bias_corr <- rpar$location
@@ -30,9 +40,16 @@ rpareto_tails <- function(n, shape = 2, bias_correct = TRUE, ac = 0,
   if (!is.na(seed)) set.seed(seed)
   rp <- rpareto(n, bias_corr, shape)
 
+
   if (ac != 0) {
     rp <- acfy(rp, ac)
   }
+
+    if (sample_bias_correct == TRUE & bias_correct == FALSE) {
+    rp <- rp - mean(rp) + 1
+    if(any(rp < 0)) warning("Negative values produced after sample bias correction.")
+  }
+
 
   if (log) {
     return(log(rp))

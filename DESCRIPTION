@@ -1,7 +1,7 @@
 Package: rtails
 Type: Package
 Title: Simulate heavy-tailed deviations
-Version: 0.0.90001
+Version: 0.0.9003
 Authors@R: person("Sebastián", "Pardo", role = c("aut", "cre"), email = "sebpardo@gmail.com", comment = c(ORCID = "0000-0002-4147-5796"))
 Description: Create random heavy-tailed deviates using several different
     distributions. This package is originally meant to provide recuitment
@@ -12,11 +12,16 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports:
-    LaplacesDemon,
     EnvStats,
+    evd,
+    fGarch,
+    ggplot2,
+    sn,
     stats
 RoxygenNote: 7.1.1
 Suggests: 
     knitr,
-    rmarkdown
+    rmarkdown,
+    testthat (>= 3.0.0)
 VignetteBuilder: knitr
+Config/testthat/edition: 3

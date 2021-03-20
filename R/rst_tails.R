@@ -9,8 +9,9 @@
 #' normal distribution.
 #' @param bias_correct logical. Should we bias correct using the sample mean.
 #'   The sample mean is calculated from exponentiated distribution,
-#'   but is subtracted, which is then re-exponentiated; therefore the
-#'   bias-correction should produce a mean of exactly 1.
+#'   but is subtracted from the distribution in normal space,
+#'    which is then re-exponentiated. Therefore, the
+#'   bias-correction produces a distribution with a mean of exactly 1.
 #' @param ac auto-correlation value, between -1 and 1. If `ac != 0` autocorrelation is
 #'   incorporated in the vector using an AR(\emph{1}) process.
 #' @param log logical. Whether to return the distribution before it is
@@ -34,6 +35,12 @@
 rst_tails <- function(n, df = 10, bias_correct = TRUE, ac = 0, log = FALSE,
                       skew = NULL, seed = NA) {
 
+  if (is.na(n) || n <= 0 || n != trunc(n) || length(n) != 1) {
+    stop("'n' must be a positive integer.")
+  }
+
+  if (df <= 0) stop("Degrees of freedom parameter must be greater than zero.")
+
   if (!is.na(seed)) set.seed(seed)
 
   if (!is.null(skew)) {
@@ -51,10 +58,7 @@ rst_tails <- function(n, df = 10, bias_correct = TRUE, ac = 0, log = FALSE,
   x_exp <- exp(x)
 
   if (bias_correct) {
-    bias_corr <- log(mean(x_exp))
-    x_corr <- x - bias_corr
-    x_corr_exp <- exp(x_corr)
-    x_corr_exp
+    return(sample_bias_corr(x))
   } else {
     x_exp
   }
