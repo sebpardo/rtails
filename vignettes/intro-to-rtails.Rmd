@@ -200,7 +200,7 @@ The GEV distribution function takes two parameters: `shape` and `scale`, the
 latter which has to be greater than zero.
 
 ```{r rgev_tails}
-rgev <- rgev_tails(80, scale = 0.23, shape = 0.2)
+rgev <- rgev_tails(80, scale = 0.23, shape = 0.2, seed = 32)
 plot_tails(rgev)
 ```
 
