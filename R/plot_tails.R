@@ -32,7 +32,7 @@ plot_tails <- function(vec) {
     mix[pos_mix] <- TRUE
   }
 
-  df <- data.frame(x = 1:n, y = vec, mix = mix)
+  df <- data.frame(x = seq_len(n), y = vec, mix = mix)
   ggplot(df, aes(x, y)) +
     scale_x_continuous(limit = c(min(df$x), max(df$x))) +
     scale_y_continuous(limit = c(ifelse(min(df$y) < 0, min(df$y), 0), max(df$y))) +

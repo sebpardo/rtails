@@ -1,6 +1,6 @@
+n <- 5000
 test_that("rnorm_tails() works correctly", {
 
-  n <- 5000
   x <- rnorm_tails(n, sigma = 0.1)
 
   expect_type(x, "double")

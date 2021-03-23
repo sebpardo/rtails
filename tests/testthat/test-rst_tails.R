@@ -1,7 +1,7 @@
+n <- 50
+
 test_that("rst_tails() works correctly", {
 
-
-  n <- 50
   x <- rst_tails(n, df = 8)
 
   expect_type(x, "double")

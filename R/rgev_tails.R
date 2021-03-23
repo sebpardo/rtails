@@ -25,10 +25,10 @@ rgev_tails <- function(n, scale = 1, shape = 0, bias_correct = TRUE,
                        ac = 0, log = FALSE, seed = NA) {
 
   if (is.na(n) || n <= 0 || n != trunc(n) || length(n) != 1) {
-    stop("'n' must be a positive integer.")
+    stop("'n' must be a positive integer.", call. = FALSE)
   }
 
-  if (scale <= 0) stop("Scale parameter must be greater than zero.")
+  if (scale <= 0) stop("Scale parameter must be greater than zero.", call. = FALSE)
 
   # # For warnings
   # gev_pars <- generate_gev_par(scale, shape)

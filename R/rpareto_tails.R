@@ -28,9 +28,9 @@ rpareto_tails <- function(n, shape = 3, bias_correct = TRUE,
                           sample_bias_correct = FALSE, ac = 0,
                           log = FALSE, seed = NA) {
 
-  if (shape <= 0) stop("Shape parameter must be greater than zero.")
+  if (shape <= 0) stop("Shape parameter must be greater than zero.", call. = FALSE)
   if (bias_correct && sample_bias_correct) {
-    warning("Both bias_correct and sample_bias_correct set as TRUE, ignoring sample_bias_correct.")
+    warning("Both bias_correct and sample_bias_correct set as TRUE, ignoring sample_bias_correct.", call. = FALSE)
   }
 
   rpar <- generate_pareto_par(shape)

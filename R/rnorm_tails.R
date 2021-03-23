@@ -57,17 +57,17 @@ rnorm_tails <- function(n, sigma = 0.1, high_sigma = 2, rate = 1/38,
                         skew = NULL, seed = NA, replace = FALSE) {
 
   if (sigma <= 0 || high_sigma <= 0) stop("'sigma' and 'high_sigma' must be greater than zero.")
-  if (sigma >= high_sigma) stop("'sigma' is equal or greater than 'high_sigma'. The latter has to be greater.")
+  if (sigma >= high_sigma) stop("'sigma' is equal or greater than 'high_sigma'. The latter has to be greater.", call. = FALSE)
 
   if (bias_correct == TRUE & sample_bias_correct == TRUE) {
-    warning("Both bias_correct and sample_bias_correct set as TRUE, ignoring sample_bias_correct.")
+    warning("Both bias_correct and sample_bias_correct set as TRUE, ignoring sample_bias_correct.", call. = FALSE)
   }
 
   bias_corr <- bias_corr_h <- 0
 
   if (replace) {
     if (is.na(n) || !is.double(n) || length(n) < 1) {
-      stop("'n' must be a vector of deviations when replace = TRUE.")
+      stop("'n' must be a vector of deviations when replace = TRUE.", call. = FALSE)
     }
     if ( n == trunc(n) && length(n) == 1) warning("'n' is an integer of length one, therefore 'replace = TRUE' might be undesirable.")
     x_exp <- n
@@ -76,7 +76,7 @@ rnorm_tails <- function(n, sigma = 0.1, high_sigma = 2, rate = 1/38,
   } else {
 
     if (is.na(n) || n <= 0 || n != trunc(n) || length(n) != 1) {
-      stop("'n' must be a positive integer.")
+      stop("'n' must be a positive integer.", call. = FALSE)
     }
     if (bias_correct) bias_corr <- -0.5 * sigma^2
     if (!is.na(seed)) set.seed(seed)
@@ -112,7 +112,7 @@ rnorm_tails <- function(n, sigma = 0.1, high_sigma = 2, rate = 1/38,
 
   if (sample_bias_correct == TRUE & bias_correct == FALSE) {
     if (replace) {
-      stop("Cannot sample bias correct when replace = FALSE as n is a positive vector centered around 1.")
+      stop("Cannot sample bias correct when replace = FALSE as n is a positive vector centered around 1.", call. = FALSE)
     }
     x_exp <- sample_bias_corr(x)
 

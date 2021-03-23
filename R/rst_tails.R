@@ -36,10 +36,10 @@ rst_tails <- function(n, df = 10, bias_correct = TRUE, ac = 0, log = FALSE,
                       skew = NULL, seed = NA) {
 
   if (is.na(n) || n <= 0 || n != trunc(n) || length(n) != 1) {
-    stop("'n' must be a positive integer.")
+    stop("'n' must be a positive integer.", call. = FALSE)
   }
 
-  if (df <= 0) stop("Degrees of freedom parameter must be greater than zero.")
+  if (df <= 0) stop("Degrees of freedom parameter must be greater than zero.", call. = FALSE)
 
   if (!is.na(seed)) set.seed(seed)
 

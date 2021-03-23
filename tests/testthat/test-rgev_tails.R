@@ -1,6 +1,7 @@
+n <- 50
+
 test_that("rgev_tails() works correctly", {
 
-  n <- 50
   x <- rgev_tails(n, scale = 0.3, shape = 0.3)
 
   expect_type(x, "double")

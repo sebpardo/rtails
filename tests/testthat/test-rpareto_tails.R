@@ -1,6 +1,6 @@
-test_that("rpareto_tails() works correctly", {
+n <- 50
 
-  n <- 50
+test_that("rpareto_tails() works correctly", {
   x <- rpareto_tails(n, shape = 2.1)
 
   expect_type(x, "double")

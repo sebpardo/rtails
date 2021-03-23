@@ -21,7 +21,7 @@ knitr::opts_chunk$set(
 The `rtails` package provides functions to easily obtain
 heavy-tailed multiplicative random deviates (i.e., positive only, centered around 1).
 While its primary aim is to simulate heavy-tailed recruitment deviations, these
-functions could also be used for other applications as well.
+functions could be used for other applications as well.
 
 The heavy-tailed random deviates are generated using four distributions: 
 
@@ -32,12 +32,12 @@ The heavy-tailed random deviates are generated using four distributions:
 
 Where possible, functions are analytically bias-corrected around a mean of 1 
 by default. However, this correction is not always applicable
-(e.g. Student-t and GEV). We therefore also allow all functions to 
-be bias corrected using the drawn sample mean (`sample_bias_correct`). 
+(e.g., Student-t and GEV). We therefore also allow all functions to 
+be bias corrected using the sample mean (`sample_bias_correct`). 
 All functions also take a `seed` argument so that different parameterizations 
-of each distribution using a given seed can be more directly comparable.
+of each distribution using a given seed are more directly comparable.
 
-We also provide the `plot_tails()` function, for easy visualization of the 
+We also provide the `plot_tails()` function for easy visualization of the 
 generated random deviates.
  
 ## Functions 
@@ -50,7 +50,7 @@ wider distribution determined by `high_sigma` with the frequency of
 sporadic events determined by `rate`.
 The normal mixture can be used as a simple intuitive
 way of parameterizing heavy-tailed recruitment, but is particularly suitable
-for situations where it is thought there are 2 discrete state that have different
+for situations where it is thought there are two discrete states that have different
 recruitment dynamics.
 
 Aside from specifying the sample size with `n`, the `rnorm_tails()` function takes
@@ -76,7 +76,7 @@ rnt <- rnorm_tails(80, sigma = 0.1, high_sigma = 2, rate = 1/14)
 plot_tails(rnt)
 ```
 
-Notice that the sporadic recruitment points (i.e. those that diverge considerably
+Notice that the sporadic recruitment points (i.e., those that diverge considerably
 from the underlying normal distribution) are marked in red. The positions of 
 these sporadic draws are stored in the `ht` attribute of the vector object:
 
@@ -127,7 +127,7 @@ plot_tails(rnt6)
 mean(rnt6)
 ```
 
-A negatively-skewed mixture normal can be used to model heavy-tailed recruitment
+A negatively skewed mixture normal can be used to model heavy-tailed recruitment
 failures, where the rate at which they occur can be explicitly incorporated.
 
 ### Pareto distribution: `rpareto_tails()`
@@ -228,7 +228,7 @@ and Bocaccio rockfish (*S. paucispinis*) in the coast of British Columbia, Canad
 as well as deepwater redfish (*S. mentella*) and Acadian redfish (*S. fasciatus*)
 in Atlantic Canada are well-known examples. Some fast growing species also
 show a similar recruitment pattern, for example Atlantic mackerel 
-(*Scomber scombrus*) shows years or very high recruitment once or twice per decade.
+(*Scomber scombrus*) shows years of very high recruitment once or twice per decade.
 
 
 ```{r yelloweye}
@@ -243,13 +243,13 @@ rnorm_tails(60, sigma = 0.1, high_sigma = 4, rate = 1/20, bias_correct = FALSE,
   plot_tails()
 ```
 
-Pacific Cod in Alaska is a population where extreme low recruitment is 
+Pacific Cod (*Gadus macrocephalus*) in Alaska is a stock where extreme low recruitment is 
 hypothesized to have been caused by a lack of spawning environment due to 
-elevated bottom temperatures. It's probably not as extreme and the concern 
-is about downward only events, and seem to cycle more on a decadal time span.
-For this population, a negatively-skewed mixture normal would be suitable
+elevated bottom temperatures from 2014 to 2016. The deviations are probably not as extreme as in the above rockfish example, and the concern 
+is about downward only events that sometimes appear to cycle on an approximately decadal time span.
+For such a stock stock, a negatively-skewed mixture normal would be suitable
 as it can incorporate both extreme low recruitment (skewness of wider distribution)
-and it's decadal nature (`rate = 1/10`):
+and its decadal nature (`rate = 1/10`):
 
 ```{r pacific-cod} 
 rnorm_tails(60, sigma = 0.1, high_sigma = 2, rate = 1/10, 
@@ -272,10 +272,10 @@ by different arguments in each function:
 
 ### Incorporating recruitment deviations to Operating Models in `SAMtool`
 
-The main usage of this package is to provide random recruitment deviations 
+A primary usage of this package is to provide random recruitment deviations 
 to be used for Management Strategy Evaluation (MSE) using the `SAMtool` package.
 This can be done directly by providing recruitment deviates as a custom parameter,
-especifically the `Perr_y` parameter:
+specifically the `Perr_y` parameter:
 
 
 ```{r samtool-validcpars}
