@@ -16,7 +16,12 @@ acfy <- function(d, ac) {
 # which way you look at it)
 sample_bias_corr <- function(d) {
   d_exp <- exp(d)
-  if (any(d_exp == Inf)) stop("Mean cannot be estimated for bias correction as draws are too heavy-tailed: at least one draw approximates 'Inf' when exponentiated. Please adjust distribution parameters accordingly.", call. = FALSE)
+  if (any(is.infinite(d_exp))) {
+    stop("Mean cannot be estimated for bias correction as draws are ",
+      "too heavy-tailed: at least one draw approximates 'Inf' when ",
+      "exponentiated. Please adjust distribution parameters accordingly.",
+      call. = FALSE)
+  }
   bias_corr <- log(mean(d_exp))
   d_corr <- d - bias_corr
   d_corr_exp <- exp(d_corr)
