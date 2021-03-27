@@ -268,15 +268,16 @@ by different arguments in each function:
 ### Incorporating recruitment deviations to Operating Models in `SAMtool`
 
 A primary usage of this package is to provide random recruitment deviations 
-to be used for Management Strategy Evaluation (MSE) using the `SAMtool` package.
+to be used for Management Strategy Evaluation (MSE) using the `MSEtool` package.
 This can be done directly by providing recruitment deviates as a custom parameter,
 specifically the `Perr_y` parameter:
 
 
 ```{r samtool-validcpars}
 library(DT)
-library(SAMtool)
-MSEtool:::cpars_info %>% dplyr::filter(Var == "Perr_y") %>% datatable()
+library(dplyr)
+library(MSEtool)
+MSEtool:::cpars_info %>% filter(Var == "Perr_y") %>% datatable()
 ```
 
 
