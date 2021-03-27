@@ -8,6 +8,8 @@ Description: Create random heavy-tailed deviates using several different
     deviations for Management Strategy Evaluation using the openMSE packages,
     but can be used for any process where heavy-tailed deviations 
     are appropriate.
+URL: https://github.com/sebpardo/rtails
+BugReports: https://github.com/sebpardo/rtails/issues
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
