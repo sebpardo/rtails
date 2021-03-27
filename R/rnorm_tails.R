@@ -16,9 +16,9 @@
 #' @param sample_bias_correct logical. Should we bias correct using the sample
 #'   mean, which results in a mean of exactly 1. Defaults to `FALSE`. If
 #'   `bias_correct = TRUE` then this parameter is ignored (i.e. equals `FALSE`).
-#' @param ac auto-correlation value, between -1 and 1. If `ac != 0` autocorrelation is
-#'   incorporated in the vector using an AR(\emph{1}) process, and is applied
-#'   after exponentiating except when `log = TRUE`.
+#' @param ac auto-correlation value, between -1 and 1. If `ac != 0`
+#'   autocorrelation is incorporated in the vector using an AR(\emph{1})
+#'   process, and is applied after exponentiating except when `log = TRUE`.
 #' @param log logical. Whether to return the distribution before it is
 #'   bias corrected and exponentiated. This is not equivalent to
 #'   log-transforming the distribution when `log = FALSE`.
@@ -56,20 +56,30 @@ rnorm_tails <- function(n, sigma = 0.1, high_sigma = 2, rate = 1/38,
                         ac = 0, log = FALSE, plus_one = FALSE,
                         skew = NULL, seed = NA, replace = FALSE) {
 
-  if (sigma <= 0 || high_sigma <= 0) stop("'sigma' and 'high_sigma' must be greater than zero.")
-  if (sigma >= high_sigma) stop("'sigma' is equal or greater than 'high_sigma'. The latter has to be greater.", call. = FALSE)
-
+  if (sigma <= 0 || high_sigma <= 0) {
+    stop("'sigma' and 'high_sigma' must be greater than zero.",
+         call. = FALSE)
+  }
+  if (sigma >= high_sigma) {
+  stop("'sigma' is equal or greater than 'high_sigma'.",
+  "The latter has to be greater.", call. = FALSE)
+  }
   if (bias_correct == TRUE & sample_bias_correct == TRUE) {
-    warning("Both bias_correct and sample_bias_correct set as TRUE, ignoring sample_bias_correct.", call. = FALSE)
+    warning("Both bias_correct and sample_bias_correct set as TRUE, ",
+            "ignoring sample_bias_correct.", call. = FALSE)
   }
 
   bias_corr <- bias_corr_h <- 0
 
   if (replace) {
     if (is.na(n) || !is.double(n) || length(n) < 1) {
-      stop("'n' must be a vector of deviations when replace = TRUE.", call. = FALSE)
+      stop("'n' must be a vector of deviations when replace = TRUE.",
+           call. = FALSE)
+      }
     }
-    if ( n == trunc(n) && length(n) == 1) warning("'n' is an integer of length one, therefore 'replace = TRUE' might be undesirable.")
+    if ( n == trunc(n) && length(n) == 1) {
+      warning("'n' is an integer of length one, therefore",
+              "'replace = TRUE' might be undesirable.", call. = FALSE)
     x_exp <- n
     n <- length(x_exp)
 
@@ -112,7 +122,8 @@ rnorm_tails <- function(n, sigma = 0.1, high_sigma = 2, rate = 1/38,
 
   if (sample_bias_correct == TRUE & bias_correct == FALSE) {
     if (replace) {
-      stop("Cannot sample bias correct when replace = FALSE as n is a positive vector centered around 1.", call. = FALSE)
+      stop("Cannot sample bias correct when replace = FALSE",
+           "as 'n' is a positive vector centered around 1.", call. = FALSE)
     }
     x_exp <- sample_bias_corr(x)
 

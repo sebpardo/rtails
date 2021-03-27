@@ -1,6 +1,7 @@
 # add autocorrelation (AR1)
 acfy <- function(d, ac) {
-  if (ac < -1 || ac > 1) stop("Autocorrelation value not between -1 and 1.", call. = FALSE)
+  if (ac < -1 || ac > 1) stop("Autocorrelation value not between -1 and 1.",
+                              call. = FALSE)
   nd <- length(d)
   d_ac <- numeric(length = nd)
   d_ac[1] <- d[1]

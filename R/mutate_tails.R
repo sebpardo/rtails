@@ -24,11 +24,13 @@
 #'
 #' @examples
 #' recdevs <- exp(rnorm(60, -0.5 * 0.1^2, 0.1)) # bias-corrected
-#' recdevs_st <- mutate_tails(recdevs, dist = "student-t", args = list(df = 0.5))
+#' recdevs_st <- mutate_tails(recdevs, dist = "student-t",
+#'                                   args = list(df = 0.5))
 #' plot_tails(recdevs)
 #' plot_tails(recdevs_st)
 #'
-#' recdevs_p <- mutate_tails(recdevs, dist = "pareto", args = list(shape = 1.005))
+#' recdevs_p <- mutate_tails(recdevs, dist = "pareto",
+#'                                  args = list(shape = 1.005))
 #' plot_tails(recdevs_p)
 #'
 #' @export

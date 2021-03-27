@@ -11,8 +11,9 @@
 #' @param sample_bias_correct logical. Should we bias correct using the sample
 #'   mean. Defaults to `FALSE`.If `bias_correct = TRUE` then this parameter
 #'   is ignored (i.e. equals `FALSE`).
-#' @param ac auto-correlation value, between -1 and 1. If `ac != 0` autocorrelation is
-#'   incorporated in the vector using an AR(\emph{1}) process.
+#' @param ac auto-correlation value, between -1 and 1. If `ac != 0`
+#'   autocorrelation is incorporated in the vector using
+#'   an AR(\emph{1}) process.
 #' @param log logical. Whether to return the log-transformed distribution.
 #' @param seed seed. Numeric for `set.seed()`. Defaults to NA where no seed is
 #'   set.
@@ -28,9 +29,11 @@ rpareto_tails <- function(n, shape = 3, bias_correct = TRUE,
                           sample_bias_correct = FALSE, ac = 0,
                           log = FALSE, seed = NA) {
 
-  if (shape <= 0) stop("Shape parameter must be greater than zero.", call. = FALSE)
+  if (shape <= 0) stop("Shape parameter must be greater than zero.",
+                       call. = FALSE)
   if (bias_correct && sample_bias_correct) {
-    warning("Both bias_correct and sample_bias_correct set as TRUE, ignoring sample_bias_correct.", call. = FALSE)
+    warning("Both bias_correct and sample_bias_correct set as TRUE, ",
+            "ignoring 'sample_bias_correct'.", call. = FALSE)
   }
 
   rpar <- generate_pareto_par(shape)
@@ -47,7 +50,10 @@ rpareto_tails <- function(n, shape = 3, bias_correct = TRUE,
 
     if (sample_bias_correct == TRUE & bias_correct == FALSE) {
     rp <- rp - mean(rp) + 1
-    if(any(rp < 0)) warning("Negative values produced after sample bias correction.")
+    if(any(rp < 0)) {
+      warning("Negative values produced after sample bias correction.",
+              call. = FALSE)
+    }
   }
 
 
@@ -58,8 +64,8 @@ rpareto_tails <- function(n, shape = 3, bias_correct = TRUE,
     }
 }
 
-# Function to return the location parameter such that mean of the distribution is 1.
-# Also calculate the variance of the distribution
+# Function to return the location parameter such that mean of the
+# distribution is 1. Also calculates the variance of the distribution
 generate_pareto_par <- function(shape) {
   if(shape <= 1) {
     warning("Mean is infinite because shape <= 1.")

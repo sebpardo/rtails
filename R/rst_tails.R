@@ -12,8 +12,8 @@
 #'   but is subtracted from the distribution in normal space,
 #'    which is then re-exponentiated. Therefore, the
 #'   bias-correction produces a distribution with a mean of exactly 1.
-#' @param ac auto-correlation value, between -1 and 1. If `ac != 0` autocorrelation is
-#'   incorporated in the vector using an AR(\emph{1}) process.
+#' @param ac auto-correlation value, between -1 and 1. If `ac != 0` then
+#' autocorrelation is incorporated in the vector using an AR(\emph{1}) process.
 #' @param log logical. Whether to return the distribution before it is
 #'   bias corrected and exponentiated. This is not equivalent to
 #'   log-transforming the distribution when `log = FALSE`.
@@ -39,7 +39,8 @@ rst_tails <- function(n, df = 10, bias_correct = TRUE, ac = 0, log = FALSE,
     stop("'n' must be a positive integer.", call. = FALSE)
   }
 
-  if (df <= 0) stop("Degrees of freedom parameter must be greater than zero.", call. = FALSE)
+  if (df <= 0) stop("Degrees of freedom parameter must be greater than zero.",
+                    call. = FALSE)
 
   if (!is.na(seed)) set.seed(seed)
 

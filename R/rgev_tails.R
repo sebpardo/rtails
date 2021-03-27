@@ -1,15 +1,15 @@
 #' Random generation of generalized extreme value deviations
 #'
-#' Random generation for the generalized extreme value (GEV) distribution, centered around a mean
-#' of one, with parameter `shape`.
+#' Random generation for the generalized extreme value (GEV) distribution,
+#' centered around a mean of one, with parameter `shape`.
 #'
 #' @param n sample size.
 #' @param loc location parameter.
 #' @param scale scale parameter. Must be > 0.
 #' @param shape shape parameter. Default is shape = 2.
 #' @param bias_correct logical. Should we bias correct using the sample mean?
-#' @param ac auto-correlation value, between -1 and 1. If `ac != 0` autocorrelation is
-#'   incorporated in the vector using an AR(\emph{1}) process.
+#' @param ac auto-correlation value, between -1 and 1. If `ac != 0`
+#'  autocorrelation is incorporated in the vector using an AR(\emph{1}) process.
 #' @param log logical. Whether to return the log-transformed distribution.
 #' @param seed seed. Numeric for `set.seed()`. Defaults to NA where no seed is
 #'   set.
@@ -28,7 +28,8 @@ rgev_tails <- function(n, scale = 1, shape = 0, bias_correct = TRUE,
     stop("'n' must be a positive integer.", call. = FALSE)
   }
 
-  if (scale <= 0) stop("Scale parameter must be greater than zero.", call. = FALSE)
+  if (scale <= 0) stop("Scale parameter must be greater than zero.",
+                       call. = FALSE)
 
   # # For warnings
   # gev_pars <- generate_gev_par(scale, shape)
