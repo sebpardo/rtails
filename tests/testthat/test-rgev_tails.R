@@ -30,6 +30,8 @@ test_that("rgev_tails() fails correctly", {
   expect_error(rgev_tails(-10, scale = 0.3, shape = 0.3),
                  "'n' must be a positive integer")
   expect_error(rgev_tails(n, scale = 0.3, shape = 0.3, bias_correct = "foo"))
-  expect_error(supressWarnings(rgev_tails(n, scale = 0.3, shape = 0.3, seed = "foo")))
-  expect_error(rgev_tails(n, scale =3, shape = 5), "Mean cannot be estimated for bias correction as draws are too heavy-tailed")
+  expect_error(supressWarnings(rgev_tails(n, scale = 0.3, shape = 0.3,
+                                          seed = "foo")))
+  expect_error(rgev_tails(n, scale =3, shape = 5),
+               "Mean cannot be estimated for bias correction")
 })
