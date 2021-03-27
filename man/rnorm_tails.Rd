@@ -39,9 +39,9 @@ using `rbinom(1, n, rate)`.}
 mean, which results in a mean of exactly 1. Defaults to `FALSE`. If
 `bias_correct = TRUE` then this parameter is ignored (i.e. equals `FALSE`).}
 
-\item{ac}{auto-correlation value, between -1 and 1. If `ac != 0` autocorrelation is
-incorporated in the vector using an AR(\emph{1}) process, and is applied
-after exponentiating except when `log = TRUE`.}
+\item{ac}{auto-correlation value, between -1 and 1. If `ac != 0`
+autocorrelation is incorporated in the vector using an AR(\emph{1})
+process, and is applied after exponentiating except when `log = TRUE`.}
 
 \item{log}{logical. Whether to return the distribution before it is
 bias corrected and exponentiated. This is not equivalent to

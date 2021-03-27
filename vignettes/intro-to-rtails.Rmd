@@ -59,13 +59,8 @@ for the heavy-tailed sporadic values (`high_sigma`). The probability of replacin
 value with the sporadic draw is given by the `rate` argument, while autocorrelation (`ac`), skew (`skew`),
 and bias correction using the sample mean (`sample_bias_correction`) can also be incorporated.
 
-```{r packages, eval=FALSE}
+```{r packages}
 library(rtails)
-library(magrittr)
-```
-
-```{r real-packages, include=FALSE}
-devtools::load_all()
 library(magrittr)
 ```
 

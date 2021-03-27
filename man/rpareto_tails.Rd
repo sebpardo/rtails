@@ -27,8 +27,9 @@ The mean to use for bias correction can only be calculated when
 mean. Defaults to `FALSE`.If `bias_correct = TRUE` then this parameter
 is ignored (i.e. equals `FALSE`).}
 
-\item{ac}{auto-correlation value, between -1 and 1. If `ac != 0` autocorrelation is
-incorporated in the vector using an AR(\emph{1}) process.}
+\item{ac}{auto-correlation value, between -1 and 1. If `ac != 0`
+autocorrelation is incorporated in the vector using
+an AR(\emph{1}) process.}
 
 \item{log}{logical. Whether to return the log-transformed distribution.}
 

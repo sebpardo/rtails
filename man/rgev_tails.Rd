@@ -23,8 +23,8 @@ rgev_tails(
 
 \item{bias_correct}{logical. Should we bias correct using the sample mean?}
 
-\item{ac}{auto-correlation value, between -1 and 1. If `ac != 0` autocorrelation is
-incorporated in the vector using an AR(\emph{1}) process.}
+\item{ac}{auto-correlation value, between -1 and 1. If `ac != 0`
+autocorrelation is incorporated in the vector using an AR(\emph{1}) process.}
 
 \item{log}{logical. Whether to return the log-transformed distribution.}
 
@@ -34,8 +34,8 @@ set.}
 \item{loc}{location parameter.}
 }
 \description{
-Random generation for the generalized extreme value (GEV) distribution, centered around a mean
-of one, with parameter `shape`.
+Random generation for the generalized extreme value (GEV) distribution,
+centered around a mean of one, with parameter `shape`.
 }
 \examples{
 rgev <- rgev_tails(50, 0, 1, bias_correct = TRUE)

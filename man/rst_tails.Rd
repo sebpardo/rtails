@@ -27,8 +27,8 @@ but is subtracted from the distribution in normal space,
  which is then re-exponentiated. Therefore, the
 bias-correction produces a distribution with a mean of exactly 1.}
 
-\item{ac}{auto-correlation value, between -1 and 1. If `ac != 0` autocorrelation is
-incorporated in the vector using an AR(\emph{1}) process.}
+\item{ac}{auto-correlation value, between -1 and 1. If `ac != 0` then
+autocorrelation is incorporated in the vector using an AR(\emph{1}) process.}
 
 \item{log}{logical. Whether to return the distribution before it is
 bias corrected and exponentiated. This is not equivalent to
