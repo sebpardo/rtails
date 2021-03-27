@@ -24,6 +24,7 @@
 #'
 #' @return a vector of random deviates of length `n`.
 #'
+#' @importFrom stats rt
 #' @importFrom fGarch rsstd
 #'
 #' @examples

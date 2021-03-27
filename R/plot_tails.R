@@ -14,8 +14,9 @@
 #' have been included, these values are marked in red.
 #'
 #' @importFrom ggplot2 ggplot scale_x_continuous scale_y_continuous
-#' @importFrom ggplot2 coord_cartesian aes geom_point geom_line
+#' @importFrom ggplot2 coord_cartesian aes_ geom_point geom_line
 #' @importFrom ggplot2 geom_hline geom_rug
+#' @importFrom grDevices rgb
 #'
 #' @examples
 #' rpt <- rpareto_tails(50, 3)
@@ -33,13 +34,13 @@ plot_tails <- function(vec) {
   }
 
   df <- data.frame(x = seq_len(n), y = vec, mix = mix)
-  ggplot(df, aes(x, y)) +
-    scale_x_continuous(limit = c(min(df$x), max(df$x))) +
-    scale_y_continuous(limit = c(ifelse(min(df$y) < 0,
+  ggplot(df, aes_(x = ~x, y = ~y)) +
+    scale_x_continuous(limits = c(min(df$x), max(df$x))) +
+    scale_y_continuous(limits = c(ifelse(min(df$y) < 0,
                                         min(df$y), 0), max(df$y))) +
     coord_cartesian(clip = "off") +
     geom_hline(yintercept = 0:1, color = "grey") +
-    geom_line(aes(x, mean), size = 0.5, color = "darkgreen") +
+    geom_line(aes_(x = ~x, y = ~mean), size = 0.5, color = "darkgreen") +
     geom_point(shape = 1, color = ifelse(mix, "red", "black")) +
     geom_line(size = 0.2, color = "grey60") +
     geom_rug(size = 0.1, sides = "r",
