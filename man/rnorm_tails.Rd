@@ -13,7 +13,6 @@ rnorm_tails(
   sample_bias_correct = FALSE,
   ac = 0,
   log = FALSE,
-  plus_one = FALSE,
   skew = NULL,
   seed = NA,
   replace = FALSE

@@ -30,15 +30,13 @@ autocorrelation is incorporated in the vector using an AR(\emph{1}) process.}
 
 \item{seed}{seed. Numeric for `set.seed()`. Defaults to NA where no seed is
 set.}
-
-\item{loc}{location parameter.}
 }
 \description{
 Random generation for the generalized extreme value (GEV) distribution,
 centered around a mean of one, with parameter `shape`.
 }
 \examples{
-rgev <- rgev_tails(50, 0, 1, bias_correct = TRUE)
+rgev <- rgev_tails(80, scale = 0.23, shape = 0.2)
 plot_tails(rgev)
 
 }
