@@ -53,8 +53,8 @@
 #' @export
 rnorm_tails <- function(n, sigma = 0.1, high_sigma = 2, rate = 1/38,
                         bias_correct = TRUE, sample_bias_correct = FALSE,
-                        ac = 0, log = FALSE, plus_one = FALSE,
-                        skew = NULL, seed = NA, replace = FALSE) {
+                        ac = 0, log = FALSE, skew = NULL,
+                        seed = NA, replace = FALSE) {
 
   if (sigma <= 0 || high_sigma <= 0) {
     stop("'sigma' and 'high_sigma' must be greater than zero.",

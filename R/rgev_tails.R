@@ -4,7 +4,6 @@
 #' centered around a mean of one, with parameter `shape`.
 #'
 #' @param n sample size.
-#' @param loc location parameter.
 #' @param scale scale parameter. Must be > 0.
 #' @param shape shape parameter. Default is shape = 2.
 #' @param bias_correct logical. Should we bias correct using the sample mean?
@@ -17,7 +16,7 @@
 #' @importFrom evd rgev
 #'
 #' @examples
-#' rgev <- rgev_tails(50, 0, 1, bias_correct = TRUE)
+#' rgev <- rgev_tails(80, scale = 0.23, shape = 0.2)
 #' plot_tails(rgev)
 #'
 #' @export
