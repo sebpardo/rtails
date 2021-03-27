@@ -72,11 +72,11 @@ rnorm_tails <- function(n, sigma = 0.1, high_sigma = 2, rate = 1/38,
   bias_corr <- bias_corr_h <- 0
 
   if (replace) {
-    if (is.na(n) || !is.double(n) || length(n) < 1) {
+    if (any(is.na(n)) || !is.double(n) || length(n) < 1) {
       stop("'n' must be a vector of deviations when replace = TRUE.",
            call. = FALSE)
       }
-    if ( n == trunc(n) && length(n) == 1) {
+    if (length(n) == 1 && all(n == trunc(n))) {
       warning("'n' is an integer of length one, therefore",
               "'replace = TRUE' might be undesirable.", call. = FALSE)
     }

@@ -1,4 +1,6 @@
 n <- 5000
+n2 <- 80
+
 test_that("rnorm_tails() works correctly", {
 
   x <- rnorm_tails(n, sigma = 0.1)
@@ -13,7 +15,6 @@ test_that("rnorm_tails() works correctly", {
   x3 <- rnorm_tails(n, sigma = 0.1, bias_correct = FALSE)
   expect_lt(mean(x), mean(x3))
 
-  n2 <- 80
   x4 <- rnorm_tails(n2, sigma = 0.1, seed = 1984)
   x5 <- rnorm_tails(n2, sigma = 0.1, seed = 1984)
   expect_identical(x4, x5)
