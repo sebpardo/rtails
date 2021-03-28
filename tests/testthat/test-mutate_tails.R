@@ -32,7 +32,8 @@ test_that("mutate_tails() fails correctly", {
   expect_error(mutate_tails(x, dist = "student-t", args = list(foo = 5)))
   expect_error(mutate_tails(x, dist = "pareto", args = list(foo = 5)))
 
-  expect_error(mutate_tails(FALSE, dist = "student-t", args = list(df = 2)))
+  expect_error(mutate_tails(FALSE, dist = "student-t", args = list(df = 2)),
+               "Vector 'x' has logical values.")
   expect_error(mutate_tails(rnorm(n)), "Vector 'x' has negative values.")
 
 })

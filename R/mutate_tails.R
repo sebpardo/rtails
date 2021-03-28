@@ -39,21 +39,23 @@
 mutate_tails <- function(x, dist = c("student-t", "pareto"), nout = length(x),
                          bootstrap = FALSE,  args = list()) {
   if (any(x < 0)) stop("Vector 'x' has negative values.", call. = FALSE)
+  if (any(is.logical(x))) stop("Vector 'x' has logical values.", call. = FALSE)
   dist <- match.arg(dist)
   lx <- length(x)
   if (nout != lx && !bootstrap) {
     warning("'nout' is different to length(x) yet bootstrap = FALSE, ",
              "ignoring 'nout'.", call. = FALSE)
   }
-  px <- pnorm(x) # or pnorm(log(x)) or log(pnorm(x))?
+  px <- pnorm(log(x)) # or pnorm(log(x)) or log(pnorm(x))?
 
-  if (dist == "student-t") qt <- qt(px, df = args$df)
+  if (dist == "student-t") qt <- exp(qt(px, df = args$df))
   if (dist == "pareto") {
-    # parpars <- generate_pareto_par(shape = args$shape)
-    qt <- qpareto(px, location = 1, shape = args$shape)
+    parpars <- generate_pareto_par(shape = args$shape)
+    qt <- qpareto(px, location = parpars$location, shape = args$shape)
+    qt <- qt/mean(qt)
   }
   # potential centering options:
-  x_new <- qt/mean(qt)
+  x_new <- qt #/mean(qt)
   # x_new <- qt - mean(qt) + 1
   #x_new <- scale(qt, scale = FALSE) + 1
 
