@@ -34,10 +34,15 @@ Where possible, functions are analytically bias-corrected around a mean of 1
 by default. However, this correction is not always applicable
 (e.g., Student-t and GEV). We therefore also allow all functions to 
 be bias corrected using the sample mean (`sample_bias_correct`). 
-All functions also take a `seed` argument so that different parameterizations 
-of each distribution using a given seed are more directly comparable.
+All random draw functions also take a `seed` argument so that different
+parameterizations of each distribution using a given seed are more directly 
+comparable.
 
-We also provide the `plot_tails()` function for easy visualization of the 
+We also provide the `mutate_tails()` function that converts an existing set
+of normal random deviates into deviates with a Student-t or Pareto distribution, 
+and allows for bootstrapping.
+
+Lastly, the `plot_tails()` function allows for easy visualization of the 
 generated random deviates.
  
 ## Functions 
@@ -212,6 +217,30 @@ Including autocorrelation:
 ```{r rgev_tails_ac}
 rgev_tails(80, scale = 0.23, shape = 0.2, ac = 0.8) %>% plot_tails()
 ```
+
+### Mutate existing deviates: `mutate_tails()`
+
+If you have an existing set of normally-distributed deviations (for example,
+previously-estimated recruitment deviations) you can use the `mutate_tails()`
+function to convert them to heavy-tailed deviations:
+
+```{r mutate_tails}
+recdevs <- exp(rnorm(60, -0.5 * 0.1^2, 0.1)) # log-normal centered around 1
+recdevs_st <- mutate_tails(recdevs, dist = "student-t", args = list(df = 0.5))
+plot_tails(recdevs)
+plot_tails(recdevs_st)
+```
+
+While the relative position of each data point is maintained, this function 
+also allows for bootstrapping, which can be used to generate a larger
+number of draws:
+
+```{r mutate_tails_boot}
+recdevs_rep <- mutate_tails(recdevs, dist = "student-t", args = list(df = 0.5),
+                           bootstrap = TRUE, nout = 100)
+plot_tails(recdevs_rep)
+```
+
 
 ## Usage examples
 
