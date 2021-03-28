@@ -1,4 +1,5 @@
 n <- 50
+sd1 <- 0.1
 
 test_that("mutate_tails() works correctly", {
 
