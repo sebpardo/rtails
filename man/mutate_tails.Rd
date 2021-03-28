@@ -36,7 +36,8 @@ around zero and bias corrected, as well as exponentiated.
 This function takes a series of normally-distributed deviations
 and "stretches" them into a heavy-tailed distribution. It uses `pnorm()` to
 transform to a uniform distribution and then a quantile function to
-transform to a distribution of type `dist`.
+transform to a distribution of type `dist` (`qt` or `qpareto`). Centering
+the resulting distribution around one is done by dividing by the mean.
 }
 \examples{
 recdevs <- exp(rnorm(60, -0.5 * 0.1^2, 0.1)) # bias-corrected
