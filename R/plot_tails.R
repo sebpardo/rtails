@@ -26,6 +26,9 @@
 #'
 
 plot_tails <- function(vec) {
+  if (!is.numeric(vec)) stop("'vec' must be numeric.", call. = FALSE)
+  if (any(is.infinite(vec))) stop("Some values are infinite.", call. = FALSE)
+
   n <- length(vec); mean <- mean(vec)
   mix <- rep(FALSE, n)
   if (!is.null(attr(vec, "ht"))) {
