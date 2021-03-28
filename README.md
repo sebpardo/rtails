@@ -28,7 +28,11 @@ be bias corrected using the drawn sample mean (`sample_bias_correct`).
 All functions also take a `seed` argument so that different parameterizations 
 of each distribution using a given seed can be more directly comparable.
 
-We also provide the `plot_tails()` function, for easy visualization of the 
+We also provide the `mutate_tails()` function that converts an existing set
+of normal random deviates into deviates with a Student-t or Pareto distribution, 
+and allows for bootstrapping.
+
+Lastly, the `plot_tails()` function allows for easy visualization of the 
 generated random deviates.
 
 See the vignette for more details.
