@@ -17,7 +17,9 @@
 #' @details This function takes a series of normally-distributed deviations
 #' and "stretches" them into a heavy-tailed distribution. It uses `pnorm()` to
 #' transform to a uniform distribution and then a quantile function to
-#' transform to a distribution of type `dist`.
+#' transform to a distribution of type `dist` (`qt` or `qpareto`). Centering
+#' the resulting distribution around one is done by dividing by the mean.
+#'
 #'
 #' @importFrom EnvStats qpareto
 #' @importFrom stats qt pnorm
@@ -40,15 +42,15 @@ mutate_tails <- function(x, dist = c("student-t", "pareto"), nout = length(x),
   dist <- match.arg(dist)
   lx <- length(x)
   if (nout != lx && !bootstrap) {
-    warning(paste0("'nout' is different to length(x) yet bootstrap = FALSE, ",
-                   "ignoring 'nout'."))
+    warning("'nout' is different to length(x) yet bootstrap = FALSE, ",
+             "ignoring 'nout'.", call. = FALSE)
   }
   px <- pnorm(x) # or pnorm(log(x)) or log(pnorm(x))?
 
   if (dist == "student-t") qt <- qt(px, df = args$df)
   if (dist == "pareto") {
-    parpars <- generate_pareto_par(shape = args$shape)
-    qt <- qpareto(px, location = parpars$location, shape = args$shape)
+    # parpars <- generate_pareto_par(shape = args$shape)
+    qt <- qpareto(px, location = 1, shape = args$shape)
   }
   # potential centering options:
   x_new <- qt/mean(qt)
