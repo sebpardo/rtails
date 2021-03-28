@@ -347,5 +347,3 @@ Finally, run the MSEs:
 mse <- runMSE(OM = om, MPs = c("curEref", "FMSYref"))
 mse_ht <- runMSE(OM = om_ht, MPs = c("curEref", "FMSYref"))
 ```
-
-**TO DO: Add two simple figures to show differences in MSEs**
